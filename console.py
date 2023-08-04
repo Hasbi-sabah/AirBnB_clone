@@ -29,11 +29,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, line):
-        if not line:
-            print('** class name missing **')
-        elif line not in self.cls:
-            print("** class doesn't exist **")
-        else:
+        line_arr = shlex.split(line)
+        if self.is_valid('', line_arr, {}, 1):
             new = BaseModel()
             new.save()
             print(new.id)
@@ -41,27 +38,19 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, line):
         instances = models.storage.all()
         line_arr = shlex.split(line)
-        if len(line_arr) == 2:
+        if len(line_arr) >= 2:
             line = '{}.{}'.format(line_arr[0], line_arr[1])
-            if line in instances:
-                print(instances[line])
-            else:
-                print('** no instance found **')
-        else:
-            self.error_printer(line_arr)
+        if self.is_valid(line, line_arr, instances, 2):
+            print(instances[line])
 
     def do_destroy(self, line):
         instances = models.storage.all()
         line_arr = shlex.split(line)
-        if len(line_arr) == 2:
+        if len(line_arr) >= 2:
             line = '{}.{}'.format(line_arr[0], line_arr[1])
-            if line in instances:
-                del instances[line]
-                models.storage.save()
-            else:
-                print('** no instance found **')
-        else:
-            self.error_printer(line_arr)
+        if self.is_valid(line, line_arr, instances, 2):
+            del instances[line]
+            models.storage.save()
 
     def do_all(self, line):
         instances = models.storage.all()
@@ -75,12 +64,33 @@ class HBNBCommand(cmd.Cmd):
                 lst.append(str(instances[inst]))
         print(lst)
 
-    def error_printer(self, args):
-        if not args:
+    def do_update(self, line):
+        instances = models.storage.all()
+        line_arr = shlex.split(line)
+        if len(line_arr) >= 2:
+            line = '{}.{}'.format(line_arr[0], line_arr[1])
+        if self.is_valid(line, line_arr, instances, 3):
+            setattr(instances[line], line_arr[2], line_arr[3])
+            models.storage.save()
+
+
+
+    def is_valid(self, line, line_arr, instances, flag):
+        if flag >= 1 and len(line_arr) == 0:
             print('** class name missing **')
-        elif args[0] not in self.cls:
+        elif flag >= 1 and line_arr[0] not in self.cls:
             print("** class doesn't exist **")
-        elif len(args) < 2:
+        elif flag >= 2 and len(line_arr) == 1:
             print('** instance id missing **')
+        elif flag >= 2 and line not in instances:
+            print('** no instance found **')
+        elif flag >= 3 and len(line_arr) == 2:
+            print('** attribute name missing **')
+        elif flag >= 3 and len(line_arr) == 3:
+            print('** value missing **')
+        else:
+            return True
+        return False
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
