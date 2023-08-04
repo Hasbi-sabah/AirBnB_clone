@@ -2,13 +2,19 @@
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 import models
 import uuid
 import shlex
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
-    cls = ['BaseModel']
+    cls = ['BaseModel', 'User', 'Place', 'City', 'State', 'Amenity', 'Review']
 
     def do_quit(self, line):
         '''handles quit'''
@@ -31,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         line_arr = shlex.split(line)
         if self.is_valid('', line_arr, {}, 1):
-            new = BaseModel()
+            new = eval(line_arr[0])()
             new.save()
             print(new.id)
 
