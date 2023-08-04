@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Base Model for AirBnB
 """
@@ -36,4 +37,4 @@ class BaseModel:
         return curr.isoformat(format="%Y-%m-%dT%H:%M:%S.%f")
 
     def __str__(self):
-        return f"[{self.__class__.__name__]} ({self.id}) {self.__dict__}"
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
