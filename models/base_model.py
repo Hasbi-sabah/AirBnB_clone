@@ -10,11 +10,23 @@ class BaseModel:
     """
     Base class
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Initialize the class"""
-        self.id = str(uuid.uuid4())
-        self.created_at = self.current_time()
-        self.update_at = self.current_time()
+        if kwargs is not None and kwargs:
+            for key, value in kwargs.items():
+                if key in ("created_at", "update_at"):
+                    setattr(self, key, self.str_to_iso(value))
+                elif key != "__class__":
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.current_time()
+            self.update_at = self.current_time()
+
+    def str_to_iso(self, date_str):
+        """ Convert string to isoformat"""
+        fmt = "%Y-%m-%dT%H:%M:%S.%f"
+        return datetime.datetime.strptime(date_str, fmt)
 
     def current_time(self):
         """ Get the current time"""
