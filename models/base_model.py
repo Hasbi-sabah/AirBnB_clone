@@ -4,6 +4,7 @@ Base Model for AirBnB
 """
 import uuid
 import datetime
+import models
 
 
 class BaseModel:
@@ -22,6 +23,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = self.current_time()
             self.update_at = self.current_time()
+            models.storage.new(self)
 
     def str_to_iso(self, date_str):
         """ Convert string to isoformat"""
@@ -34,7 +36,8 @@ class BaseModel:
 
     def save(self):
         """ Updates the time"""
-        self.update = self.current_time()
+        self.update_at = self.current_time()
+        models.storage.save()
 
     def to_dict(self):
         """ Return a dictionary of of the class instance"""

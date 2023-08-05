@@ -3,32 +3,33 @@
 The data storage module
 """
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage():
-    __file_path = "../../storage.json"
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
         return self.__objects
 
-    def _get_id(self, obj):
-        return str(obj.id)
-
     def new(self, obj):
-        FileStorage.__objects[obj+"."+_get_id] = obj
+        key = "{}.{}".format(type(obj).__name__, obj.id)
+        self.__objects[key] = obj
 
     def save(self):
-        json_file = json.dumps(cls.__objects)
-        with open(cls.__file_path, "w", encoding="utf-8") as fd:
-            fd.write(json_file)
+        save_obj = {}
+        for key, value in self.__objects.items():
+            save_obj[key] = value.to_dict()
+        with open(self.__file_path, "w", encoding="utf-8") as fd:
+            json.dump(save_obj, fd)
 
     def reload(self):
         try:
-            with open(cls.__file_path, "r", encoding="utf-8") as fd:
+            with open(self.__file_path, encoding="utf-8") as fd:
                 json_fvar = json.load(fd)
 
-        FileStorage.__objects = (json_fvar)
-
+            for key, value in json_fvar.items():
+                self.new(eval(key.split('.')[0])(**value))
         except FileNotFoundError:
             pass
