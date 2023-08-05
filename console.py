@@ -11,6 +11,7 @@ from models.review import Review
 import models
 import uuid
 import shlex
+import re
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
@@ -25,6 +26,7 @@ class HBNBCommand(cmd.Cmd):
     
     def do_EOF(self, line):
         '''handles EOF'''
+        print()
         return True
 
     def help_EOF(self):
@@ -70,6 +72,14 @@ class HBNBCommand(cmd.Cmd):
                 lst.append(str(instances[inst]))
         print(lst)
 
+    def count(self, line):
+        instances = models.storage.all()
+        count = 0
+        for inst in instances:
+            if line == instances[inst].to_dict()['__class__']:
+                count += 1
+        print(count)
+
     def do_update(self, line):
         instances = models.storage.all()
         line_arr = shlex.split(line)
@@ -79,7 +89,20 @@ class HBNBCommand(cmd.Cmd):
             setattr(instances[line], line_arr[2], line_arr[3])
             models.storage.save()
 
-
+    def default(self, line):
+        instances = models.storage.all()
+        line_arr = re.match('^(\w+)\.(\w+)\((.*)\)', line)
+        if line_arr:
+            line_arr = line_arr.groups()
+        cmd = {'all': self.do_all, 'count': self.count, 'show': self.do_show, 'destroy': self.do_destroy}
+        if line_arr and len(line_arr) >= 2 and line_arr[0] in self.cls and line_arr[1] in cmd:
+            if len(line_arr) >= 3 and (line_arr[1] == 'show' or line_arr[1] == 'destroy'):
+                arg = line_arr[0] + ' ' + line_arr[2]
+            else:
+                arg = line_arr[0]
+            cmd[line_arr[1]](arg)
+        else:
+            super().default(line)
 
     def is_valid(self, line, line_arr, instances, flag):
         if flag >= 1 and len(line_arr) == 0:
