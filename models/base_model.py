@@ -49,6 +49,8 @@ class BaseModel:
 
     def fmt_time(self, curr):
         """ Format the time and date"""
+        if type(curr) is str:
+            curr = self.str_to_iso(curr)
         return curr.isoformat()
 
     def __str__(self):

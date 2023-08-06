@@ -56,27 +56,43 @@ class HBNBCommand(cmd.Cmd):
             else:
                 self.missing_class()
 
-    def do_show(self, arg):
+    def do_show(self, args):
+        key = self.verify_input(args)
+        if key:
+            all_objs = models.storage.all()
+            try:
+                print(all_objs[key])
+            except KeyError:
+                self.no_instance()
+
+    def do_destroy(self, args):
+        key = self.verify_input(args)
+        if key:
+            all_objs = models.storage.all()
+            try:
+                del all_objs[key]
+                #models.storage.save()
+            except KeyError:
+                self.no_instance()
+
+    def verify_input(self, arg):
         if arg:
             args = arg.split()
             cls_name = args[0]
             cls = self.get_className(cls_name)
             if not cls:
                 self.missing_class()
-                return
+                return None
         else:
             self.missing_name()
-            return
+            return None
         if len(args) == 2 and len(args) <= 2:
-            all_objs = models.storage.all()
             cls_id = args[1]
             key = "{}.{}".format(cls_name, cls_id)
-            try:
-                print(all_objs[key])
-            except KeyError:
-                self.no_instance()
+            return key
         else:
             self.missing_id()
+            return None
 
 if __name__=='__main__':
     HBNBCommand().cmdloop()
