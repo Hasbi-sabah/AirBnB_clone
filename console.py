@@ -42,7 +42,7 @@ class HBNBCommand(cmd.Cmd):
         print("** no instance found **")
 
     def get_className(self, cls_name):
-            return getattr(models.base_model, cls_name, None)
+        return getattr(models.base_model, cls_name, None)
 
     def do_create(self, cls_name):
         if not cls_name:
@@ -75,20 +75,38 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 self.no_instance()
 
+    def do_all(self, args=None):
+        all_objs = models.storage.all()
+        if args:
+            cls = self.check_class(args)
+            if not cls:
+                return
+            print_model = []
+            for key in all_objs.keys():
+                if args == key.split(".")[0]:
+                    print_model.append(str(all_objs[key]))
+            print(print_model)
+        else:
+            print(all_objs)
+
+    def check_class(self, arg):
+        cls = self.get_className(arg)
+        if not cls:
+            self.missing_class()
+            return None
+        return True
+
     def verify_input(self, arg):
         if arg:
             args = arg.split()
-            cls_name = args[0]
-            cls = self.get_className(cls_name)
-            if not cls:
-                self.missing_class()
+            if not self.check_class(args[0]):
                 return None
         else:
             self.missing_name()
             return None
         if len(args) == 2 and len(args) <= 2:
             cls_id = args[1]
-            key = "{}.{}".format(cls_name, cls_id)
+            key = "{}.{}".format(args[0], cls_id)
             return key
         else:
             self.missing_id()
