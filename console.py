@@ -59,22 +59,22 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         if arg:
             args = arg.split()
+            cls_name = args[0]
+            cls = self.get_className(cls_name)
+            if not cls:
+                self.missing_class()
+                return
         else:
             self.missing_name()
             return
         if len(args) == 2 and len(args) <= 2:
-            cls_name = args[0]
-            cls_id = args[1]
             all_objs = models.storage.all()
-            cls = self.get_className(cls_name)
-            if not cls:
-                self.missing_class()
-            else:
-                key = "{}.{}".format(cls_name, cls_id)
-                try:
-                    print(all_objs[key])
-                except KeyError:
-                    self.no_instance()
+            cls_id = args[1]
+            key = "{}.{}".format(cls_name, cls_id)
+            try:
+                print(all_objs[key])
+            except KeyError:
+                self.no_instance()
         else:
             self.missing_id()
 
