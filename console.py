@@ -80,9 +80,12 @@ class HBNBCommand(cmd.Cmd):
                 count += 1
         print(count)
 
-    def do_update(self, line):
+    def do_update(self, line, flag=0):
         instances = models.storage.all()
-        line_arr = shlex.split(line)
+        if not flag:
+            line_arr = shlex.split(line)
+        else:
+            line_arr = line
         if len(line_arr) >= 2:
             line = '{}.{}'.format(line_arr[0], line_arr[1])
         if self.is_valid(line, line_arr, instances, 3):
@@ -93,7 +96,9 @@ class HBNBCommand(cmd.Cmd):
         instances = models.storage.all()
         line_arr = re.match('^(\w+)\.(\w+)\((.*)\)', line)
         if line_arr:
-            line_arr = line_arr.groups()
+            line_arr = list(line_arr.groups()) 
+            line_arr[2] = line_arr[2].replace(',', '')
+            line_args = shlex.split(line_arr[2])
         cmd = {'all': self.do_all, 'count': self.count, 'show': self.do_show, 'destroy': self.do_destroy}
         if line_arr and len(line_arr) >= 2 and line_arr[0] in self.cls and line_arr[1] in cmd:
             if len(line_arr) >= 3 and (line_arr[1] == 'show' or line_arr[1] == 'destroy'):
@@ -101,6 +106,15 @@ class HBNBCommand(cmd.Cmd):
             else:
                 arg = line_arr[0]
             cmd[line_arr[1]](arg)
+        elif line_arr and len(line_arr) >= 2 and line_arr[1] == 'update':
+            if len(line_args) == 1:
+                args = [line_arr[0], line_args[0]]
+                self.do_update(args, 1)
+            for i in range (1, len(line_args), 2):
+                args = [line_arr[0], line_args[0], line_args[i]]
+                if i + 1 < len(line_args):
+                    args.append(line_args[i + 1])
+                self.do_update(args, 1)
         else:
             super().default(line)
 

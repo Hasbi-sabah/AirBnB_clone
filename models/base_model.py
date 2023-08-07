@@ -11,6 +11,8 @@ class BaseModel:
                 if key == 'created_at' or key == 'updated_at':
                     d_format = '%Y-%m-%dT%H:%M:%S.%f'
                     setattr(self, key, datetime.strptime(item, d_format))
+                elif key == 'id':
+                    setattr(self, key, str(item))
                 else:
                     setattr(self, key, item)
         if not kwargs:
