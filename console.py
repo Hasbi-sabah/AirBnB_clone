@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Console 0.0.1
+Module for the HBnB clone console
 """
+
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -10,29 +11,78 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import storage
 import json
-import models
 import re
 import shlex
 
+
 class HBNBCommand(cmd.Cmd):
+    """
+    HBNBCommand class
+
+    A command-line interpreter for managing objects within
+    an HBNB data storage system.
+
+    Attributes:
+        prompt (str): The command prompt string.
+        cls (list): A list of available class names for object management.
+    """
+
     prompt = "(hbnb) "
     cls = ["BaseModel", "User", "Place", "State", "City", "Amenity", "Review"]
 
     def do_EOF(self, line):
-        """ exits the program"""
-        print("")
+        """
+        Exit the command interpreter on end-of-file (Ctrl+D).
+        """
+        print()
         return True
+
+    def help_EOF(self):
+        """
+        Display help information for the EOF command.
+        """
+        print("\nUsage: EOF\n")
+        print("This command allows you to exit the command", end=" ")
+        print("interpreter gracefully by pressing Ctrl+D (EOF).\n")
 
     def do_quit(self, arg):
-        """ Quit command to exit the program"""
+        """
+        Exit the command interpreter.
+        """
         return True
 
+    def help_quit(self):
+        """
+        Display help information for the quit command.
+        """
+        print("\nUsage: quit\n")
+        print("This command allows you to exit the command", end=" ")
+        print("interpreter gracefully.\n")
+
     def emptyline(self):
-        """handles empty lines"""
+        """
+        Do nothing when an empty line is entered.
+        """
         pass
 
     def is_valid(self, line, line_arr, instances, flag):
+        """
+        Check the validity of the input based on the specified conditions.
+
+        Args:
+            line (str): The user input string.
+            line_arr (list): The split user input as a list of words.
+            instances (dict): A dictionary containing instances.
+            flag (int): An integer representing the validation level:
+                    1 - Class name validation
+                    2 - Instance ID validation
+                    3 - Attribute and value validation
+
+        Returns:
+            bool: True if the input is valid, False otherwise.
+        """
         if flag >= 1 and len(line_arr) == 0:
             print("** class name missing **")
         elif flag >= 1 and line_arr[0] not in self.cls:
@@ -50,6 +100,17 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def int_float(self, line):
+        """
+        Convert a string to an integer or a float if possible.
+
+        Args:
+            line (str): The input string to be converted.
+
+        Returns:
+            int, float, or str: The converted value if the
+            input matches the format of an integer or a float;
+            otherwise, the original input string.
+        """
         if re.match(r"^\d+$", line):
             return int(line)
         elif re.match(r"^\d+\.\d+$", line):
@@ -58,31 +119,78 @@ class HBNBCommand(cmd.Cmd):
             return line
 
     def do_create(self, line):
+        """
+        Create a new instance of a specified class and save it to storage.
+
+        Args:
+            line (str): The user input string containing the class name.
+        """
         line_arr = shlex.split(line)
         if self.is_valid("", line_arr, {}, 1):
             my_model = eval(line_arr[0])()
             my_model.save()
             print(my_model.id)
 
+    def help_create(self):
+        """
+        Display help information for the create command.
+        """
+        print("\nUsage: create <class_name>\n")
+        print("This command creates a new instance of", end=" ")
+        print("the specified class and assigns it a unique identifier.\n")
+
     def do_show(self, line):
-        instances = models.storage.all()
+        """
+        Display the string representation of an instance.
+
+        Args:
+            line (str): The user input string containing the class name and id.
+        """
+        instances = storage.all()
         line_arr = shlex.split(line)
         if len(line_arr) >= 2:
             line = "{}.{}".format(line_arr[0], line_arr[1])
         if self.is_valid(line, line_arr, instances, 2):
             print(instances[line])
 
+    def help_show(self):
+        """
+        Display help information for the show command.
+        """
+        print("\nUsage: show <class_name> <id>\n")
+        print("This command displays an instance's string representation.\n")
+
     def do_destroy(self, line):
-        instances = models.storage.all()
+        """
+        Delete an instance by class name and instance ID.
+
+        Args:
+            line (str): The user input containing class name and instance ID.
+        """
+        instances = storage.all()
         line_arr = shlex.split(line)
         if len(line_arr) >= 2:
             line = "{}.{}".format(line_arr[0], line_arr[1])
             if self.is_valid(line, line_arr, instances, 2):
                 del instances[line]
-                models.storage.save()
+                storage.save()
+
+    def help_destroy(self):
+        """
+        Display help for the destroy command.
+        """
+        print("\nUsage: help destroy\n")
+        print("Destroy command deletes an instance by class", end=' ')
+        print("name and instance ID.\n")
 
     def do_all(self, line=None):
-        instances = models.storage.all()
+        """
+        Display string representations of all instances.
+
+        Args:
+            line (str, opt): The user input containing optional class name.
+        """
+        instances = storage.all()
         line_arr = shlex.split(line)
         if len(line_arr) == 1 and line_arr[0] not in self.cls:
             print("** class doesn't exist **")
@@ -96,8 +204,23 @@ class HBNBCommand(cmd.Cmd):
                 print_model.append(str(instances[inst]))
         print(print_model)
 
+    def help_all(self):
+        """
+        Display help for the all command.
+        """
+        print("\nUsage: help all\n")
+        print("All command displays string representations of all instances.")
+        print("Optionally, provide a class name to filter instances", end=' ')
+        print("of a specific class.\n")
+
     def count(self, line):
-        instances = models.storage.all()
+        """
+        Count the number of instances of a specified class.
+
+        Args:
+            line (str): The user input containing the class name.
+        """
+        instances = storage.all()
         count = 0
         for inst in instances:
             if line == instances[inst].to_dict()["__class__"]:
@@ -105,7 +228,17 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_update(self, line, flag=0):
-        instances = models.storage.all()
+        """
+        Update an instance attribute's value by class name and instance ID.
+
+        Args:
+            line (str or list): The user input containing class name, ID,
+                                attribute name, and new attribute value.
+            flag (int, optional): A flag indicating the source of the input:
+                                  0 - User input (default)
+                                  1 - Direct input (no shlex.split)
+        """
+        instances = storage.all()
         if not flag:
             line_arr = shlex.split(line)
         else:
@@ -115,11 +248,26 @@ class HBNBCommand(cmd.Cmd):
         if self.is_valid(line, line_arr, instances, 3):
             line_arr[3] = self.int_float(line_arr[3])
             setattr(instances[line], line_arr[2], line_arr[3])
-            models.storage.save()
+            storage.save()
+
+    def help_update(self):
+        """
+        Display help for the update command.
+        """
+        print("\nUsage: help update\n")
+        print("Update command modifies an instance's attribute value", end=" ")
+        print("by class name, instance ID, attribute name, and value.")
+        print("Provide required arguments to update.\n")
 
     def default(self, line):
-        instances = models.storage.all()
-        line_arr = re.match("^(\w+)\.(\w+)\((.*)\)", line)
+        """
+        Handle behavior for commands of format <cls>.<cmd>(<additionnal_args>).
+
+        Args:
+            line (str): The user input string representing an unknown command.
+        """
+        instances = storage.all()
+        line_arr = re.match(r"^(\w+)\.(\w+)\((.*)\)", line)
         if line_arr:
             line_arr = list(line_arr.groups())
             line_arr[2] = line_arr[2].replace(",", "")
@@ -127,8 +275,10 @@ class HBNBCommand(cmd.Cmd):
             for i in range(len(line_args)):
                 line_args[i] = line_args[i].strip("{}:")
         cmd = {
-            "all": self.do_all, "count": self.count,
-            "show": self.do_show, "destroy": self.do_destroy,
+            "all": self.do_all,
+            "count": self.count,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
         }
         if (
             line_arr
@@ -155,5 +305,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             super().default(line)
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     HBNBCommand().cmdloop()

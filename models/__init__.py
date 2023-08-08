@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-init module
+Script to initialize a FileStorage instance and reload stored data.
 """
 from models.engine.file_storage import FileStorage
 
