@@ -248,7 +248,7 @@ class HBNBCommand(cmd.Cmd):
         if self.is_valid(line, line_arr, instances, 3):
             line_arr[3] = self.int_float(line_arr[3])
             setattr(instances[line], line_arr[2], line_arr[3])
-            storage.save()
+            instances[line].save()
 
     def help_update(self):
         """
