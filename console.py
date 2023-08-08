@@ -10,29 +10,23 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import json
 import models
 import re
 
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
+    cls = ["BaseModel", "User", "Place", "State", "City", "Amenity", "Review"]
 
     def do_EOF(self, line):
         """ exits the program"""
         print("")
         return True
 
-    def help_EOF(self):
-        """ Shows the commands available"""
-        print("exit the program")
-
     def do_quit(self, arg):
         """ Quit command to exit the program"""
         return True
-
-    def format_help(self, command):
-        display = super.format_help(command)
-        return display + '\n'
 
     def emptyline(self):
         pass
@@ -50,7 +44,8 @@ class HBNBCommand(cmd.Cmd):
         print("** no instance found **")
 
     def get_className(self, cls_name):
-        return getattr(models.base_model, cls_name, None)
+        if cls_name in self.cls:
+            return eval(cls_name)
 
     def do_create(self, cls_name):
         """ Create a instance"""
@@ -65,15 +60,23 @@ class HBNBCommand(cmd.Cmd):
             else:
                 self.missing_class()
 
-    def do_show(self, args):
-        """ Display the requested data"""
-        key = self.verify_input(args)
+    def check_ins(self, key):
         if key:
             all_objs = models.storage.all()
             try:
-                print(all_objs[key])
+                val = all_objs[key]
+                return True
             except KeyError:
                 self.no_instance()
+        else:
+            return False
+
+    def do_show(self, args):
+        """ Display the requested data"""
+        key = self.verify_input(args)
+        all_objs = models.storage.all()
+        if self.check_ins(key):
+                print(all_objs[key])
 
     def do_destroy(self, args):
         """ Delete an instance"""
@@ -116,20 +119,34 @@ class HBNBCommand(cmd.Cmd):
 
     def check_val_typ(self, arg):
         if re.match(r"^\d+$", arg):
-            return int(args)
+            return int(arg)
         elif re.match(r"^\d+\.\d+$", arg):
             return float(arg)
+        elif re.match(r'^\s*\{.*\}\s*$', arg):
+            print("Yay")
+            return eval(arg)
         else:
-            return arg
+            arg = arg.strip("\",'")
+            return str(arg)
 
     def do_update(self, args):
         """ Update specific object"""
         if self.check_atr(args):
             all_objs = models.storage.all()
-            atr = args.split()
-            obj = "{}.{}".format(atr[0], atr[1])
-            value = self.check_val_typ(atr[3])
-            setattr(all_objs[obj], atr[2], value)
+            #atr = args.split()
+            #args = args[1:-1]
+            match = re.match(r'(\w+) ([\w-]+) (\w+) (.+)', args)
+            if match:
+                cls_name, obj_id, attr, attr_val = match.groups()
+                print(f"first: {cls_name} {type(cls_name)}")
+                print(f"second: {obj_id} {type(obj_id)}")
+                print(f"third: {attr} {type(attr)}")
+                print(f"fourth: {attr_val} {type(attr_val)}")
+            obj = "{}.{}".format(cls_name, obj_id)
+            print(attr_val)
+            value = self.check_val_typ(attr_val)
+            print(f"value's type: {type(value)}")
+            setattr(all_objs[obj], attr, value)
             models.storage.save()
 
 
@@ -151,7 +168,10 @@ class HBNBCommand(cmd.Cmd):
         if len(args) >= 2:
             cls_id = args[1]
             key = "{}.{}".format(args[0], cls_id)
-            return key
+            if self.check_ins(key):
+                return key
+            else:
+                return None
         else:
             self.missing_id()
             return None
