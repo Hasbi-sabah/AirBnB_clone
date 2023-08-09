@@ -60,6 +60,46 @@ class TestBaseModel(unittest.TestCase):
         test_with_arg = BaseModel("args")
         self.assertNotIn("args", test_with_arg.__dict__)
 
+        # Check if __str__ prints correct output
+        str_output = "[BaseModel] ({}) {}".format(test_model.id, test_model.__dict__)
+        self.assertEqual(str(test_model), str_output)
+
+    def test_kwargs_input(self):
+        """ Test ``BaseModel`` initialization with kwargs"""
+        dic = {
+                'id': 'test_id',
+                'created_at': '2023-08-09T12:34:56.789012',
+                'updated_at': '2023-08-09T13:45:12.345678',
+                'name': 'Wills',
+                'value': 42
+                }
+        test_model = BaseModel(**dic)
+
+        self.assertEqual(test_model.id, "test_id")
+        self.assertEqual(test_model.name, "Wills")
+        self.assertEqual(test_model.value, 42)
+        self.assertIsInstance(test_model.created_at, datetime)
+        self.assertIsInstance(test_model.updated_at, datetime)
+
+    def test_to_dict_data_type(self):
+        """ Test each data type after ``to_dict`` """
+        test_model = BaseModel()
+        test_model.name = "Sabah"
+        test_model.age = "lol"
+        test_model.num = 12
+        test_model.float_num = 12.21
+        test_model.bool_val = True
+
+        test_dict = test_model.to_dict()
+
+        self.assertIsInstance(test_dict, dict)
+        self.assertEqual(test_dict["__class__"], "BaseModel")
+        self.assertEqual(test_dict["id"], test_model.id)
+        self.assertEqual(test_dict["name"], "Sabah")
+        self.assertEqual(test_dict["age"], "lol")
+        self.assertEqual(test_dict["num"], 12)
+        self.assertEqual(test_dict["float_num"], 12.21)
+        self.assertEqual(test_dict["bool_val"], True)
 
 if __name__ == "__main__":
     unittest.main()
