@@ -147,11 +147,12 @@ class TestConsole(unittest.TestCase):
 
     def test_show_with_valid_class_and_id(self):
         test_inst = User()
-        cmd = "show User {self.test_attr.id}"
+        test_inst.save()
+        cmd = f"show User {test_inst.id}"
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd(cmd)
             output = f.getvalue().strip()
-            self.assertIn("[User] ({self.test_attr.id})", output)
+            self.assertIn(f"[User] ({test_inst.id})", output)
 
     def test_show_without_class_name(self):
         cmd = "show"
