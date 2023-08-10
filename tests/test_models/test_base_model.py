@@ -8,10 +8,11 @@ import uuid
 from datetime import datetime
 from models.base_model import BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
     """ Test the class ``BaseModel`` """
 
-    def setup(self):
+    def setUp(self):
         pass
 
     def test_class_doc(self):
@@ -61,8 +62,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotIn("args", test_with_arg.__dict__)
 
         # Check if __str__ prints correct output
-        str_output = "[BaseModel] ({}) {}".format(test_model.id, test_model.__dict__)
-        self.assertEqual(str(test_model), str_output)
+        str_ = "[BaseModel] ({}) {}".format(test_model.id, test_model.__dict__)
+        self.assertEqual(str(test_model), str_)
 
     def test_kwargs_input(self):
         """ Test ``BaseModel`` initialization with kwargs"""
@@ -100,6 +101,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(test_dict["num"], 12)
         self.assertEqual(test_dict["float_num"], 12.21)
         self.assertEqual(test_dict["bool_val"], True)
+
 
 if __name__ == "__main__":
     unittest.main()
