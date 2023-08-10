@@ -12,6 +12,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from models import storage
+from typing import get_type_hints
 import json
 import re
 import shlex
@@ -99,7 +100,7 @@ class HBNBCommand(cmd.Cmd):
             return True
         return False
 
-    def int_float(self, line):
+    def value_type(self, attr, line, obj):
         """
         Convert a string to an integer or a float if possible.
 
@@ -111,7 +112,10 @@ class HBNBCommand(cmd.Cmd):
             input matches the format of an integer or a float;
             otherwise, the original input string.
         """
-        if re.match(r"^\d+$", line):
+        if (hasattr(obj, attr)):
+            attr_type = type(getattr(obj, attr))
+            return attr_type(line)
+        elif re.match(r"^\d+$", line):
             return int(line)
         elif re.match(r"^\d+\.\d+$", line):
             return float(line)
@@ -246,7 +250,7 @@ class HBNBCommand(cmd.Cmd):
         if len(line_arr) >= 2:
             line = "{}.{}".format(line_arr[0], line_arr[1])
         if self.is_valid(line, line_arr, instances, 3):
-            line_arr[3] = self.int_float(line_arr[3])
+            line_arr[3] = self.value_type(line_arr[2], line_arr[3], instances[line])
             setattr(instances[line], line_arr[2], line_arr[3])
             instances[line].save()
 
