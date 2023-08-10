@@ -153,34 +153,135 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd(cmd)
             output = f.getvalue().strip()
             self.assertIn(f"[User] ({test_inst.id})", output)
+            self.assertIn("created_at", output)
+            self.assertIn("updated_at", output)
+            self.assertIn("id", output)
+            self.assertNotIn("__class__", output)
 
     def test_show_without_class_name(self):
-        cmd = "show"
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd('show')
             output = f.getvalue().strip()
             self.assertEqual(output, "** class name missing **")
 
     def test_show_with_invalid_class_name(self):
-        cmd = "show MyModel"
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd('show MyModel')
             output = f.getvalue().strip()
             self.assertEqual(output, "** class doesn't exist **")
 
     def test_show_without_instance_id(self):
-        cmd = "show User"
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd('show User')
             output = f.getvalue().strip()
             self.assertEqual(output, "** instance id missing **")
 
     def test_show_with_invalid_instance_id(self):
-        cmd = "show User 121212"
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd('show User 121212')
             output = f.getvalue().strip()
             self.assertEqual(output, "** no instance found **")
+
+    def test_destroy_with_valid_class_and_id(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"destroy User {test_inst.id}"
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(cmd)
+            HBNBCommand().onecmd(f'show User {test_inst.id}')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+    
+    def test_destroy_with_missing_class_name(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class name missing **")
+
+    def test_destroy_with_nonexistent_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy MyModel')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
+
+    def test_destroy_with_missing_id(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy BaseModel')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** instance id missing **")
+
+    def test_destroy_with_nonexistent_instance(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('destroy BaseModel 121212')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+
+    def test_update_with_valid_input_str(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} name 'malibu smith'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'name'))
+        self.assertEqual(test_inst.name, "malibu smith")
+        self.assertEqual(type(test_inst.name), str)
+
+    def test_update_with_valid_input_int(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} age 24"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'age'))
+        self.assertEqual(test_inst.age, 24)
+        self.assertEqual(type(test_inst.age), int)
+
+    def test_update_with_valid_input_float(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} height 1.80"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'height'))
+        self.assertEqual(test_inst.height, 1.80)
+        self.assertEqual(type(test_inst.height), float)
+
+    def test_update_with_missing_class_name(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class name missing **")
+
+    def test_update_with_nonexistent_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update MyModel')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
+
+    def test_update_with_missing_id(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** instance id missing **")
+
+    def test_update_with_nonexistent_instance(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('update BaseModel 121212')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** no instance found **")
+
+    def test_update_with_missing_attribute_name(self):
+        test_inst = User()
+        test_inst.save()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f'update User {test_inst.id}')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** attribute name missing **")
+
+    def test_update_with_missing_attribute_value(self):
+        test_inst = User()
+        test_inst.save()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd(f'update User {test_inst.id} name')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** value missing **")
 
 if __name__ == '__main__':
     unittest.main()
