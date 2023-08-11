@@ -178,9 +178,9 @@ class HBNBCommand(cmd.Cmd):
         line_arr = shlex.split(line)
         if len(line_arr) >= 2:
             line = "{}.{}".format(line_arr[0], line_arr[1])
-            if self.is_valid(line, line_arr, instances, 2):
-                del instances[line]
-                storage.save()
+        if self.is_valid(line, line_arr, instances, 2):
+            del instances[line]
+            storage.save()
 
     def help_destroy(self):
         """
