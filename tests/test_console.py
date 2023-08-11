@@ -343,6 +343,55 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(hasattr(test_inst, 'number_bathrooms'))
         self.assertEqual(test_inst.number_bathrooms, 2)
         self.assertEqual(type(test_inst.number_bathrooms), int)
+        cmd = f"update Place {test_inst.id} max_guest 6"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'max_guest'))
+        self.assertEqual(test_inst.max_guest, 6)
+        self.assertEqual(type(test_inst.max_guest), int)
+        cmd = f"update Place {test_inst.id} price_by_night 500"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'price_by_night'))
+        self.assertEqual(test_inst.price_by_night, 500)
+        self.assertEqual(type(test_inst.price_by_night), int)
+        cmd = f"update Place {test_inst.id} latitude 200.5"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'latitude'))
+        self.assertEqual(test_inst.latitude, 200.5)
+        self.assertEqual(type(test_inst.latitude), float)
+        cmd = f"update Place {test_inst.id} latitude 200"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'latitude'))
+        self.assertEqual(test_inst.latitude, 200)
+        self.assertEqual(type(test_inst.latitude), float)
+        cmd = f"update Place {test_inst.id} longitude 200.5"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'longitude'))
+        self.assertEqual(test_inst.longitude, 200.5)
+        self.assertEqual(type(test_inst.longitude), float)
+        cmd = f"update Place {test_inst.id} longitude 200"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'longitude'))
+        self.assertEqual(test_inst.longitude, 200)
+        self.assertEqual(type(test_inst.longitude), float)
+
+    def test_update_with_Review_attr(self):
+        test_inst = Review()
+        test_inst.save()
+        cmd = f"update Review {test_inst.id} place_id 'a random id'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'place_id'))
+        self.assertEqual(test_inst.place_id, 'a random id')
+        self.assertEqual(type(test_inst.place_id), str)
+        cmd = f"update Review {test_inst.id} user_id 'a random user id'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'user_id'))
+        self.assertEqual(test_inst.user_id, 'a random user id')
+        self.assertEqual(type(test_inst.user_id), str)
+        cmd = f"update Review {test_inst.id} text 'this is so boring'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'text'))
+        self.assertEqual(test_inst.text, 'this is so boring')
+        self.assertEqual(type(test_inst.text), str)
 
     def test_update_with_missing_class_name(self):
         with patch('sys.stdout', new=StringIO()) as f:
@@ -383,6 +432,14 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd(f'update User {test_inst.id} name')
             output = f.getvalue().strip()
             self.assertEqual(output, "** value missing **")
+
+    def test_update_with_many_input(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} name 'malibu smith' age 30 height 1.7"
+        HBNBCommand().onecmd(cmd)
+        self.assertFalse(hasattr(test_inst, 'age'))
+        self.assertFalse(hasattr(test_inst, 'height'))
 
 if __name__ == '__main__':
     unittest.main()
