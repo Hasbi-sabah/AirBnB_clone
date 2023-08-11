@@ -163,6 +163,8 @@ class TestConsole(unittest.TestCase):
             self.assertIn("updated_at", output)
             self.assertIn("id", output)
             self.assertNotIn("__class__", output)
+            self.assertFalse(output.startswith('[\"'))
+            self.assertFalse(output.endswith('\"]'))
 
     def test_show_without_class_name(self):
         with patch('sys.stdout', new=StringIO()) as f:
@@ -221,6 +223,64 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd('destroy BaseModel 121212')
             output = f.getvalue().strip()
             self.assertEqual(output, "** no instance found **")
+
+    def test_all_with_no_class(self):
+        test_inst1 = User()
+        test_inst1.save()
+        test_inst2 = User()
+        test_inst2.save()
+        test_inst3 = User()
+        test_inst2.save()
+        test_inst4 = Place()
+        test_inst4.save()
+        test_inst5 = Place()
+        test_inst5.save()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all')
+            output = f.getvalue().strip()
+            self.assertIn(f"[User] ({test_inst1.id})", output)
+            self.assertIn(f"[User] ({test_inst2.id})", output)
+            self.assertIn(f"[User] ({test_inst3.id})", output)
+            self.assertIn(f"[Place] ({test_inst4.id})", output)
+            self.assertIn(f"[Place] ({test_inst5.id})", output)
+            self.assertNotIn(f"[Basemodel]", output)
+            self.assertNotIn(f"[City]", output)
+            self.assertTrue(output.startswith('[\"'))
+            self.assertTrue(output.endswith('\"]'))
+
+    def test_all_with_valid_class(self):
+        test_inst1 = User()
+        test_inst1.save()
+        test_inst2 = User()
+        test_inst2.save()
+        test_inst3 = City()
+        test_inst2.save()
+        test_inst4 = Place()
+        test_inst4.save()
+        test_inst5 = Place()
+        test_inst5.save()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all User')
+            output = f.getvalue().strip()
+            self.assertIn(f"[User] ({test_inst1.id})", output)
+            self.assertIn(f"[User] ({test_inst2.id})", output)
+            self.assertNotIn(f"[Place]", output)
+            self.assertNotIn(f"[Basemodel]", output)
+            self.assertNotIn(f"[City]", output)
+            self.assertTrue(output.startswith('[\"'))
+            self.assertTrue(output.endswith('\"]'))
+
+    def test_all_with_empty_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all User')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "[]")
+
+    def test_all_with_noexistent_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('all MyModel')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
 
     def test_update_with_valid_input_str(self):
         test_inst = User()
