@@ -114,8 +114,11 @@ class HBNBCommand(cmd.Cmd):
         """
         if (hasattr(obj, attr)):
             attr_type = type(getattr(obj, attr))
-            return attr_type(line)
-        elif re.match(r"^\d+$", line):
+            try:
+                return attr_type(line)
+            except ValueError:
+                pass
+        if re.match(r"^\d+$", line):
             return int(line)
         elif re.match(r"^\d+\.\d+$", line):
             return float(line)
