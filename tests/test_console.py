@@ -309,6 +309,12 @@ class TestConsole(unittest.TestCase):
         self.assertEqual(test_inst.height, 1.80)
         self.assertEqual(type(test_inst.height), float)
 
+    def test_update_with_class(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} __class__ 'not allowed'"
+        self.assertNotEqual(test_inst.__class__, 'not allowed')
+
     def test_update_with_user_attr(self):
         test_inst = User()
         test_inst.save()
@@ -500,6 +506,40 @@ class TestConsole(unittest.TestCase):
         HBNBCommand().onecmd(cmd)
         self.assertFalse(hasattr(test_inst, 'age'))
         self.assertFalse(hasattr(test_inst, 'height'))
+
+    def test_all_with_valid_class2(self):
+        test_inst1 = User()
+        test_inst1.save()
+        test_inst2 = User()
+        test_inst2.save()
+        test_inst3 = City()
+        test_inst2.save()
+        test_inst4 = Place()
+        test_inst4.save()
+        test_inst5 = Place()
+        test_inst5.save()
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('User.all()')
+            output = f.getvalue().strip()
+            self.assertIn(f"[User] ({test_inst1.id})", output)
+            self.assertIn(f"[User] ({test_inst2.id})", output)
+            self.assertNotIn(f"[Place]", output)
+            self.assertNotIn(f"[Basemodel]", output)
+            self.assertNotIn(f"[City]", output)
+            self.assertTrue(output.startswith('[\"'))
+            self.assertTrue(output.endswith('\"]'))
+
+    def test_all_with_empty_class2(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('User.all()')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "[]")
+
+    def test_all_with_noexistent_class2(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('MyModel.all()')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
 
 if __name__ == '__main__':
     unittest.main()
