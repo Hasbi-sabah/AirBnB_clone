@@ -7,8 +7,10 @@ from models.state import State
 
 
 class TestState(unittest.TestCase):
-    def test_attributes(self):
+
+    def test_attribute_name(self):
         state = State()
+        self.assertTrue(hasattr(state, 'name'))
         self.assertEqual(state.name, "")
 
 

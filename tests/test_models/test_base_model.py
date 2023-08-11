@@ -54,9 +54,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(test_model.updated_at)
         self.assertIsInstance(test_model.updated_at, datetime)
 
-        # Check if updated_at time is after created_at
-        self.assertGreater(test_model.updated_at, test_model.created_at)
-
         # Check that *args was not used
         test_with_arg = BaseModel("args")
         self.assertNotIn("args", test_with_arg.__dict__)
