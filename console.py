@@ -287,7 +287,6 @@ class HBNBCommand(cmd.Cmd):
         if (
             line_arr
             and len(line_arr) >= 2
-            and line_arr[0] in self.cls
             and line_arr[1] in cmd
         ):
             if len(line_arr) >= 3 and (

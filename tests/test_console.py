@@ -4,7 +4,13 @@ import unittest
 from io import StringIO
 from unittest.mock import patch, Mock
 from console import HBNBCommand
+from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 import console
 
 class TestConsole(unittest.TestCase):
@@ -242,6 +248,101 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(hasattr(test_inst, 'height'))
         self.assertEqual(test_inst.height, 1.80)
         self.assertEqual(type(test_inst.height), float)
+
+    def test_update_with_user_attr(self):
+        test_inst = User()
+        test_inst.save()
+        cmd = f"update User {test_inst.id} email 'airbnb@mail.com'"
+        HBNBCommand().onecmd(cmd)
+        cmd = f"update User {test_inst.id} password root"
+        HBNBCommand().onecmd(cmd)
+        cmd = f"update User {test_inst.id} first_name Betty"
+        HBNBCommand().onecmd(cmd)
+        cmd = f"update User {test_inst.id} last_name Holberton"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'email'))
+        self.assertEqual(test_inst.email, 'airbnb@mail.com')
+        self.assertEqual(type(test_inst.email), str)
+        self.assertTrue(hasattr(test_inst, 'password'))
+        self.assertEqual(test_inst.password, 'root')
+        self.assertEqual(type(test_inst.password), str)
+        self.assertTrue(hasattr(test_inst, 'first_name'))
+        self.assertEqual(test_inst.first_name, 'Betty')
+        self.assertEqual(type(test_inst.first_name), str)
+        self.assertTrue(hasattr(test_inst, 'last_name'))
+        self.assertEqual(test_inst.last_name, 'Holberton')
+        self.assertEqual(type(test_inst.last_name), str)
+
+    def test_update_with_state_attr(self):
+        test_inst = State()
+        test_inst.save()
+        cmd = f"update State {test_inst.id} name Betty"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'name'))
+        self.assertEqual(test_inst.name, 'Betty')
+        self.assertEqual(type(test_inst.name), str)
+
+    def test_update_with_city_attr(self):
+        test_inst = City()
+        test_inst.save()
+        cmd = f"update City {test_inst.id} state_id 'the id'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'state_id'))
+        self.assertEqual(test_inst.state_id, 'the id')
+        self.assertEqual(type(test_inst.state_id), str)
+        cmd = f"update City {test_inst.id} state_id 404"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'state_id'))
+        self.assertEqual(test_inst.state_id, '404')
+        self.assertEqual(type(test_inst.state_id), str)
+        cmd = f"update City {test_inst.id} name 'roma'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'name'))
+        self.assertEqual(test_inst.name, 'roma')
+        self.assertEqual(type(test_inst.name), str)
+
+    def test_update_with_amenity_attr(self):
+        test_inst = Amenity()
+        test_inst.save()
+        cmd = f"update Amenity {test_inst.id} name 'sea side'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'name'))
+        self.assertEqual(test_inst.name, 'sea side')
+        self.assertEqual(type(test_inst.name), str)
+
+    def test_update_with_place_attr(self):
+        test_inst = Place()
+        test_inst.save()
+        cmd = f"update Place {test_inst.id} city_id 'a random id'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'city_id'))
+        self.assertEqual(test_inst.city_id, 'a random id')
+        self.assertEqual(type(test_inst.city_id), str)
+        cmd = f"update Place {test_inst.id} user_id 'a random user id'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'user_id'))
+        self.assertEqual(test_inst.user_id, 'a random user id')
+        self.assertEqual(type(test_inst.user_id), str)
+        cmd = f"update Place {test_inst.id} name 'Betty'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'name'))
+        self.assertEqual(test_inst.name, 'Betty')
+        self.assertEqual(type(test_inst.name), str)
+        cmd = f"update Place {test_inst.id} description 'this is boring'"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'description'))
+        self.assertEqual(test_inst.description, 'this is boring')
+        self.assertEqual(type(test_inst.description), str)
+        cmd = f"update Place {test_inst.id} number_rooms 5"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'number_rooms'))
+        self.assertEqual(test_inst.number_rooms, 5)
+        self.assertEqual(type(test_inst.number_rooms), int)
+        cmd = f"update Place {test_inst.id} number_bathrooms 2"
+        HBNBCommand().onecmd(cmd)
+        self.assertTrue(hasattr(test_inst, 'number_bathrooms'))
+        self.assertEqual(test_inst.number_bathrooms, 2)
+        self.assertEqual(type(test_inst.number_bathrooms), int)
 
     def test_update_with_missing_class_name(self):
         with patch('sys.stdout', new=StringIO()) as f:
