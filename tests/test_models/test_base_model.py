@@ -71,6 +71,10 @@ class TestBaseModel(unittest.TestCase):
         # Check if __str__ prints correct output
         str_ = "[BaseModel] ({}) {}".format(test_model.id, test_model.__dict__)
         self.assertEqual(str(test_model), str_)
+        
+        old = test_model.updated_at
+        test_model.save()
+        self.assertGreater(test_model.updated_at, old)
 
     def test_kwargs_input(self):
         """Test ``BaseModel`` initialization with kwargs"""
@@ -108,7 +112,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(test_dict["num"], 12)
         self.assertEqual(test_dict["float_num"], 12.21)
         self.assertEqual(test_dict["bool_val"], True)
-
 
 if __name__ == "__main__":
     unittest.main()
