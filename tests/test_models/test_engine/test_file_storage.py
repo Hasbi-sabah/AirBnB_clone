@@ -51,10 +51,24 @@ class TestFileStorage(unittest.TestCase):
         self.storage.new(base_model)
         self.storage.save()
 
+        # Test updated attribute
+        base_model.name = "Updated name"
+        base_model.save()
+
         new_storage = FileStorage()
         new_storage.reload()
         key = "{}.{}".format(base_model.__class__.__name__, base_model.id)
         self.assertIn(key, self.storage._FileStorage__objects)
+        reloaded_ins = new_storage.all()[key]
+        #self.assertEqual(reloaded_ins.name, "Updated Name")
+
+
+    def test_reload_with_no_file(self):
+        """Test reload when json file doesn't exist does not raise error"""
+        try:
+            self.storage.reload()
+        except FileNotFoundError:
+            self.fail("Error raised")
 
 
 if __name__ == "__main__":
