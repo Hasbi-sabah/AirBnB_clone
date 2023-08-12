@@ -18,7 +18,7 @@ import console
 class TestConsole(unittest.TestCase):
     def setUp(self):
         try:
-            os.rename("file.json", "filetest.json")
+            os.remove("file.json")
         except IOError:
             pass
         FileStorage._FileStorage__objects = {}
@@ -26,10 +26,6 @@ class TestConsole(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove("file.json")
-        except IOError:
-            pass
-        try:
-            os.rename("filetest.json", "file.json")
         except IOError:
             pass
 
