@@ -61,6 +61,9 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsNotNone(test_model.updated_at)
         self.assertIsInstance(test_model.updated_at, datetime)
 
+        self.assertTrue(hasattr(test_model, "__class__"))
+        self.assertIsNotNone(test_model.__class__)
+        self.assertIsInstance(test_model.__class__, object)
         # Check that *args was not used
         test_with_arg = BaseModel("args")
         self.assertNotIn("args", test_with_arg.__dict__)
