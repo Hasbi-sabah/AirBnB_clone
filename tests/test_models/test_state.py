@@ -6,8 +6,8 @@ import unittest
 from models.state import State
 import models.state
 
-class TestState(unittest.TestCase):
 
+class TestState(unittest.TestCase):
     def test_module_doc(self):
         self.assertIsNotNone(models.state.__doc__)
 
@@ -16,9 +16,9 @@ class TestState(unittest.TestCase):
 
     def test_attribute_name(self):
         state = State()
-        self.assertTrue(hasattr(state, 'name'))
+        self.assertTrue(hasattr(state, "name"))
         self.assertEqual(state.name, "")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

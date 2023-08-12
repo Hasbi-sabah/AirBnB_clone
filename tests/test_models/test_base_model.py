@@ -11,35 +11,37 @@ import models.base_model
 
 
 class TestBaseModel(unittest.TestCase):
-    """ Test the class ``BaseModel`` """
+    """Test the class ``BaseModel``"""
 
     def setUp(self):
         pass
 
     def test_module_doc(self):
-        """ Test models.base_model module for documentation"""
+        """Test models.base_model module for documentation"""
         self.assertIsNotNone(models.base_model.__doc__)
 
     def test_class_doc(self):
-        """ Test ``BaseModel`` class for documentation"""
+        """Test ``BaseModel`` class for documentation"""
         self.assertIsNotNone(BaseModel.__doc__)
 
     def test_method_docs(self):
-        """ Test methods in ``BaseModel`` for documentation"""
+        """Test methods in ``BaseModel`` for documentation"""
         methods = [
-                BaseModel.__init__, BaseModel.__str__,
-                BaseModel.save, BaseModel.to_dict
-                ]
+            BaseModel.__init__,
+            BaseModel.__str__,
+            BaseModel.save,
+            BaseModel.to_dict,
+        ]
         for meth in methods:
             self.assertIsNotNone(meth.__doc__)
 
     def test_initial_attribute(self):
-        """ Test object id"""
+        """Test object id"""
         test_model = BaseModel()
         test_model2 = BaseModel()
 
         # check if id exists, not NULL and a string
-        self.assertTrue(hasattr(test_model, 'id'))
+        self.assertTrue(hasattr(test_model, "id"))
         self.assertIsNotNone(test_model.id)
         self.assertIsInstance(test_model.id, str)
 
@@ -50,12 +52,12 @@ class TestBaseModel(unittest.TestCase):
         self.assertNotEqual(test_model.id, test_model2.id)
 
         # Check if created_at exist, not NULL, and it's from datetime
-        self.assertTrue(hasattr(test_model, 'created_at'))
+        self.assertTrue(hasattr(test_model, "created_at"))
         self.assertIsNotNone(test_model.created_at)
         self.assertIsInstance(test_model.created_at, datetime)
 
         # Check if updated_at exist, not NULL, and it's from datetime
-        self.assertTrue(hasattr(test_model, 'updated_at'))
+        self.assertTrue(hasattr(test_model, "updated_at"))
         self.assertIsNotNone(test_model.updated_at)
         self.assertIsInstance(test_model.updated_at, datetime)
 
@@ -68,14 +70,14 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(test_model), str_)
 
     def test_kwargs_input(self):
-        """ Test ``BaseModel`` initialization with kwargs"""
+        """Test ``BaseModel`` initialization with kwargs"""
         dic = {
-                'id': 'test_id',
-                'created_at': '2023-08-09T12:34:56.789012',
-                'updated_at': '2023-08-09T13:45:12.345678',
-                'name': 'Wills',
-                'value': 42
-                }
+            "id": "test_id",
+            "created_at": "2023-08-09T12:34:56.789012",
+            "updated_at": "2023-08-09T13:45:12.345678",
+            "name": "Wills",
+            "value": 42,
+        }
         test_model = BaseModel(**dic)
 
         self.assertEqual(test_model.id, "test_id")
@@ -85,7 +87,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(test_model.updated_at, datetime)
 
     def test_to_dict_data_type(self):
-        """ Test each data type after ``to_dict`` """
+        """Test each data type after ``to_dict``"""
         test_model = BaseModel()
         test_model.name = "Sabah"
         test_model.age = "lol"

@@ -6,17 +6,19 @@ import unittest
 from models.city import City
 import models.city
 
+
 class TestCity(unittest.TestCase):
-    """ Test City class"""
+    """Test City class"""
+
     def test_attribut_state_id(self):
         city = City()
-        self.assertTrue(hasattr(city, 'state_id'))
+        self.assertTrue(hasattr(city, "state_id"))
         self.assertEqual(city.state_id, "")
         self.assertTrue(type(city.state_id) == str)
 
     def test_attribut_name(self):
         city = City()
-        self.assertTrue(hasattr(city, 'name'))
+        self.assertTrue(hasattr(city, "name"))
         self.assertEqual(city.name, "")
         self.assertTrue(type(city.name) == str)
 
@@ -27,5 +29,5 @@ class TestCity(unittest.TestCase):
         self.assertIsNotNone(models.city.__doc__)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
