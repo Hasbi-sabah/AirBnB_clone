@@ -289,6 +289,7 @@ class HBNBCommand(cmd.Cmd):
             "count": self.count,
             "show": self.do_show,
             "destroy": self.do_destroy,
+            "update": None
         }
         if (
             line_arr
