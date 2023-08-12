@@ -7,7 +7,12 @@ import os
 from models.engine.file_storage import FileStorage
 import models.engine.file_storage
 from models.base_model import BaseModel
-
+from models.user import User
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.review import Review
+from models.amenity import Amenity
 
 class TestFileStorage(unittest.TestCase):
     __file_path = "file.json"
@@ -68,6 +73,33 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(key, self.storage._FileStorage__objects)
         reloaded_ins = new_storage.all()[key]
 
+    def test_save_reload_all_classes(self):
+        instances = [
+            BaseModel(),
+            User(),
+            State(),
+            City(),
+            Amenity(),
+            Place(),
+            Review()
+        ]
+
+        # Create and save to file all class instances in FileStorage
+        for instance in instances:
+            self.storage.new(instance)
+            self.storage.save()
+
+            # Clear object and reload from file
+            self.storage._FileStorage__objects = {}
+            self.storage.reload()
+
+        # Check if reloaded objects match original instances
+        for instance in instances:
+            key = "{}.{}".format(instance.__class__.__name__, instance.id)
+            reloaded_instance = self.storage.all()[key]
+            self.assertIsInstance(reloaded_instance, instance.__class__)
+            self.assertEqual(reloaded_instance.to_dict(),
+                             instance.to_dict())
 
     def test_reload_with_no_file(self):
         """Test reload when json file doesn't exist does not raise error"""
