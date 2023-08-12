@@ -798,7 +798,7 @@ class TestConsole(unittest.TestCase):
         self.assertEqual(test_inst.latitude, 200.5)
         self.assertEqual(type(test_inst.latitude), float)
         cmd = f"Place.update({test_inst.id}, latitude, 200, longitude, 200)"
-        HBNBCommand().onecmd(cmd) 
+        HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "latitude"))
         self.assertEqual(test_inst.longitude, 200)
         self.assertEqual(type(test_inst.longitude), float)
@@ -850,9 +850,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_valid_input_str3(self):
         test_inst = User()
         test_inst.save()
-        attr_dict = {
-            'name': 'malibu smith'
-        }
+        attr_dict = {"name": "malibu smith"}
         cmd = f"User.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "name"))
@@ -862,9 +860,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_valid_input_int3(self):
         test_inst = User()
         test_inst.save()
-        attr_dict = {
-            'age': 24
-        }
+        attr_dict = {"age": 24}
         cmd = f"User.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "age"))
@@ -874,9 +870,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_valid_input_float3(self):
         test_inst = User()
         test_inst.save()
-        attr_dict = {
-            'height': 1.80
-        }
+        attr_dict = {"height": 1.80}
         cmd = f"User.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "height"))
@@ -886,9 +880,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_class3(self):
         test_inst = User()
         test_inst.save()
-        attr_dict = {
-            '__class__': 'not allowed'
-        }
+        attr_dict = {"__class__": "not allowed"}
         cmd = f"User.update({test_inst.id}, {attr_dict})"
         self.assertNotEqual(test_inst.__class__, "not allowed")
 
@@ -896,10 +888,10 @@ class TestConsole(unittest.TestCase):
         test_inst = User()
         test_inst.save()
         attr_dict = {
-            'email': 'airbnb@mail.com',
-            'password': 'root',
-            'first_name': 'Betty',
-            'last_name': 'Holberton'
+            "email": "airbnb@mail.com",
+            "password": "root",
+            "first_name": "Betty",
+            "last_name": "Holberton",
         }
         cmd = f"User.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
@@ -919,9 +911,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_state_attr3(self):
         test_inst = State()
         test_inst.save()
-        attr_dict = {
-            'name': 'Betty'
-        }
+        attr_dict = {"name": "Betty"}
         cmd = f"State.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "name"))
@@ -931,10 +921,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_city_attr3(self):
         test_inst = City()
         test_inst.save()
-        attr_dict = {
-            'state_id': 'the id',
-            'name': 'roma'
-        }
+        attr_dict = {"state_id": "the id", "name": "roma"}
         cmd = f"City.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "state_id"))
@@ -947,9 +934,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_amenity_attr3(self):
         test_inst = Amenity()
         test_inst.save()
-        attr_dict = {
-            'name': 'sea side'
-        }
+        attr_dict = {"name": "sea side"}
         cmd = f"Amenity.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "name"))
@@ -960,12 +945,12 @@ class TestConsole(unittest.TestCase):
         test_inst = Place()
         test_inst.save()
         attr_dict = {
-                'city_id': 'a random id',
-                'user_id': 'a random user id',
-                'name': 'Betty',
-                'description': 'this is boring',
-                'number_rooms': 5,
-                'number_bathrooms': 2
+            "city_id": "a random id",
+            "user_id": "a random user id",
+            "name": "Betty",
+            "description": "this is boring",
+            "number_rooms": 5,
+            "number_bathrooms": 2,
         }
         cmd = f"Place.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
@@ -989,11 +974,7 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(hasattr(test_inst, "number_bathrooms"))
         self.assertEqual(test_inst.number_bathrooms, 2)
         self.assertEqual(type(test_inst.number_bathrooms), int)
-        attr_dict = {
-            'latitude': 200.5,
-            'price_by_night': 500,
-            'max_guest': 6
-        }
+        attr_dict = {"latitude": 200.5, "price_by_night": 500, "max_guest": 6}
         cmd = f"Place.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "max_guest"))
@@ -1005,12 +986,9 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(hasattr(test_inst, "latitude"))
         self.assertEqual(test_inst.latitude, 200.5)
         self.assertEqual(type(test_inst.latitude), float)
-        attr_dict = {
-            'latitude': 200,
-            'longitude': 200
-        }
+        attr_dict = {"latitude": 200, "longitude": 200}
         cmd = f"Place.update({test_inst.id}, {attr_dict})"
-        HBNBCommand().onecmd(cmd) 
+        HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "latitude"))
         self.assertEqual(test_inst.longitude, 200)
         self.assertEqual(type(test_inst.longitude), float)
@@ -1021,10 +999,7 @@ class TestConsole(unittest.TestCase):
     def test_update_with_Review_attr3(self):
         test_inst = Review()
         test_inst.save()
-        attr_dict = {
-            'place_id': 'a random id',
-            'user_id': 'a random user id'
-        }
+        attr_dict = {"place_id": "a random id", "user_id": "a random user id"}
         cmd = f"Review.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "place_id"))
@@ -1033,14 +1008,13 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(hasattr(test_inst, "user_id"))
         self.assertEqual(test_inst.user_id, "a random user id")
         self.assertEqual(type(test_inst.user_id), str)
-        attr_dict = {
-            'text': 'this is so boring'
-        }
+        attr_dict = {"text": "this is so boring"}
         cmd = f"Review.update({test_inst.id}, {attr_dict})"
         HBNBCommand().onecmd(cmd)
         self.assertTrue(hasattr(test_inst, "text"))
         self.assertEqual(test_inst.text, "this is so boring")
         self.assertEqual(type(test_inst.text), str)
+
 
 if __name__ == "__main__":
     unittest.main()
