@@ -13,26 +13,28 @@ class TestFileStorage(unittest.TestCase):
     __file_path = "file.json"
 
     def setUp(self):
+        try:
+            os.rename("file.json", "filetest.json")
+        except IOError:
+            pass
         self.storage = FileStorage()
 
     def tearDown(self):
-        if os.path.exist(self.storage._FileStorage__file_path):
-            os.remove(self.storage._FileStorage__file_path)
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("filetest.json", "file.json")
+        except IOError:
+            pass
+        FileStorage._FileStorage__objects = {}
 
     def test_module_doc(self):
         self.assertIsNotNone(models.engine.file_storage.__doc__)
 
     def test_class_doc(self):
         self.assertIsNotNone(FileStorage.__doc__)
-
-    def setUp(self):
-        """Create a strorage instance"""
-        self.storage = FileStorage()
-
-    def tearDown(self):
-        """Remove the json file"""
-        if os.path.exists(self.storage._FileStorage__file_path):
-            os.remove(self.storage._FileStorage__file_path)
 
     def test_initial_attributes(self):
         """Test it is a dictionary"""
@@ -57,8 +59,10 @@ class TestFileStorage(unittest.TestCase):
         base_model = BaseModel()
         self.storage.new(base_model)
         self.storage.save()
+        with open("file.json", "r") as file:
+            text = file.read()
+            self.assertIn("BaseModel." + base_model.id, text)
 
-        # Test updated attribute
         base_model.name = "Updated name"
         base_model.save()
 
@@ -67,7 +71,6 @@ class TestFileStorage(unittest.TestCase):
         key = "{}.{}".format(base_model.__class__.__name__, base_model.id)
         self.assertIn(key, self.storage._FileStorage__objects)
         reloaded_ins = new_storage.all()[key]
-        #self.assertEqual(reloaded_ins.name, "Updated Name")
 
 
     def test_reload_with_no_file(self):
