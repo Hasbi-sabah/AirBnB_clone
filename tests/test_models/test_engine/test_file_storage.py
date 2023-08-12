@@ -12,6 +12,13 @@ from models.base_model import BaseModel
 class TestFileStorage(unittest.TestCase):
     __file_path = "file.json"
 
+    def setUp(self):
+        self.storage = FileStorage()
+
+    def tearDown(self):
+        if os.path.exist(self.storage._FileStorage__file_path):
+            os.remove(self.storage._FileStorage__file_path)
+
     def test_module_doc(self):
         self.assertIsNotNone(models.engine.file_storage.__doc__)
 
