@@ -100,35 +100,35 @@ class TestFileStorage(unittest.TestCase):
         self.storage.new(review_model)
         self.storage.save()
 
-        new_storage = FileStorage()
-        new_storage.reload()
+        self.storage._FileStorage__objects = {}
+        self.storage.reload()
 
         self.assertEqual(
-            new_storage.all()[f"{BaseModel.__name__}.{base_model.id}"].to_dict(),
+            self.storage.all()[f"{BaseModel.__name__}.{base_model.id}"].to_dict(),
             base_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{User.__name__}.{user_model.id}"].to_dict(),
+            self.storage.all()[f"{User.__name__}.{user_model.id}"].to_dict(),
             user_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{Place.__name__}.{place_model.id}"].to_dict(),
+            self.storage.all()[f"{Place.__name__}.{place_model.id}"].to_dict(),
             place_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{State.__name__}.{state_model.id}"].to_dict(),
+            self.storage.all()[f"{State.__name__}.{state_model.id}"].to_dict(),
             state_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{City.__name__}.{city_model.id}"].to_dict(),
+            self.storage.all()[f"{City.__name__}.{city_model.id}"].to_dict(),
             city_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{Amenity.__name__}.{amenity_model.id}"].to_dict(),
+            self.storage.all()[f"{Amenity.__name__}.{amenity_model.id}"].to_dict(),
             amenity_model.to_dict(),
         )
         self.assertEqual(
-            new_storage.all()[f"{Review.__name__}.{review_model.id}"].to_dict(),
+            self.storage.all()[f"{Review.__name__}.{review_model.id}"].to_dict(),
             review_model.to_dict(),
         )
 
