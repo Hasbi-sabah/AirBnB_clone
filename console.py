@@ -250,14 +250,14 @@ class HBNBCommand(cmd.Cmd):
         """
         instances = storage.all()
         if not flag:
-            line_arr = shlex.split(line)
+            l_arr = shlex.split(line)
         else:
-            line_arr = line
-        if len(line_arr) >= 2:
-            line = "{}.{}".format(line_arr[0], line_arr[1])
-        if self.is_valid(line, line_arr, instances, 3):
-            line_arr[3] = self.value_type(line_arr[2], line_arr[3], instances[line])
-            setattr(instances[line], line_arr[2], line_arr[3])
+            l_arr = line
+        if len(l_arr) >= 2:
+            line = "{}.{}".format(l_arr[0], l_arr[1])
+        if self.is_valid(line, l_arr, instances, 3):
+            l_arr[3] = self.value_type(l_arr[2], l_arr[3], instances[line])
+            setattr(instances[line], l_arr[2], l_arr[3])
             instances[line].save()
 
     def help_update(self):
