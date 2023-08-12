@@ -19,6 +19,9 @@ class TestCity(unittest.TestCase):
         self.assertEqual(city.name, "")
         self.assertTrue(type(city.name) == str)
 
+    def test_class_doc(self):
+        self.assertIsNotNone(City.__doc__)
+
 
 if __name__ == '__main__':
     unittest.main()

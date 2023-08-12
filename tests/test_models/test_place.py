@@ -6,6 +6,9 @@ import unittest
 from models.place import Place
 
 class TestPlace(unittest.TestCase):
+    def test_class_doc(self):
+        self.assertIsNotNone(Place.__doc__)
+
     def test_attribute_city_id(self):
         place = Place()
         self.assertTrue(hasattr(place, 'city_id'))

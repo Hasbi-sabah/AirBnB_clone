@@ -11,6 +11,9 @@ class TestAmenity(unittest.TestCase):
         self.assertEqual(amenity.name, "")
         self.assertTrue(type(amenity.name) == str)
 
+    def test_class_doc(self):
+        self.assertIsNotNone(Amenity.__doc__)
+
 
 if __name__ == '__main__':
     unittest.main()
