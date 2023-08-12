@@ -4,6 +4,7 @@ Unittest for ```City``` class
 """
 import unittest
 from models.city import City
+import models.city
 
 class TestCity(unittest.TestCase):
     """ Test City class"""
@@ -21,6 +22,9 @@ class TestCity(unittest.TestCase):
 
     def test_class_doc(self):
         self.assertIsNotNone(City.__doc__)
+
+    def test_module_doc(self):
+        self.assertIsNotNone(models.city.__doc__)
 
 
 if __name__ == '__main__':

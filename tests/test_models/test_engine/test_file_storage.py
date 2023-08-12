@@ -5,11 +5,18 @@ Unittest for ```FileStorage```
 import unittest
 import os
 from models.engine.file_storage import FileStorage
+import models.engine.file_storage
 from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
     __file_path = "file.json"
+
+    def test_module_doc(self):
+        self.assertIsNotNone(models.engine.file_storage.__doc__)
+
+    def test_class_doc(self):
+        self.assertIsNotNone(FileStorage.__doc__)
 
     def setUp(self):
         """Create a strorage instance"""

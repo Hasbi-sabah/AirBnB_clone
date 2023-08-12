@@ -3,9 +3,12 @@
 """
 import unittest
 from models.review import Review
-
+import models.review
 
 class TestReview(unittest.TestCase):
+    def test_module_doc(self):
+        self.assertIsNotNone(models.review.__doc__)
+
     def test_class_doc(self):
         self.assertIsNotNone(Review.__doc__)
 

@@ -20,7 +20,7 @@ class TestConsole(unittest.TestCase):
         HBNBCommand()._HBNBCommand__session = self.mock_storage
 
     def tearDown(self):
-        pass
+        self.mock_storage.clear()
 
     def test_module_doc(self):
         self.assertIsNotNone(console.__doc__)
@@ -556,6 +556,18 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd('MyModel.all()')
             output = f.getvalue().strip()
             self.assertEqual(output, "** class doesn't exist **")
+
+    def test_count_with_nonexistent_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('MyModel.count()')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "** class doesn't exist **")
+
+    def test__with_valid_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('User.count()')
+            output = f.getvalue().strip()
+            self.assertEqual(output, "0")
 
 if __name__ == '__main__':
     unittest.main()

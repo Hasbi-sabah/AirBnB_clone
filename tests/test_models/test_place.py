@@ -4,8 +4,12 @@
 
 import unittest
 from models.place import Place
+import models.place
 
 class TestPlace(unittest.TestCase):
+    def test_module_doc(self):
+        self.assertIsNotNone(models.place.__doc__)
+
     def test_class_doc(self):
         self.assertIsNotNone(Place.__doc__)
 

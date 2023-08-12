@@ -4,9 +4,13 @@ Unittest for ```User``` class
 """
 import unittest
 from models.user import User
+import models.user
 
 class TestUser(unittest.TestCase):
     """ Test User class"""
+    def test_module_doc(self):
+        self.assertIsNotNone(models.user.__doc__)
+
     def test_class_doc(self):
         self.assertIsNotNone(User.__doc__)
 

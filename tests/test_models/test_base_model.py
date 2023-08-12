@@ -7,6 +7,7 @@ import unittest
 import uuid
 from datetime import datetime
 from models.base_model import BaseModel
+import models.base_model
 
 
 class TestBaseModel(unittest.TestCase):
@@ -14,6 +15,10 @@ class TestBaseModel(unittest.TestCase):
 
     def setUp(self):
         pass
+
+    def test_module_doc(self):
+        """ Test models.base_model module for documentation"""
+        self.assertIsNotNone(models.base_model.__doc__)
 
     def test_class_doc(self):
         """ Test ``BaseModel`` class for documentation"""

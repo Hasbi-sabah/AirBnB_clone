@@ -4,9 +4,12 @@ Unittest for ```State``` class
 """
 import unittest
 from models.state import State
-
+import models.state
 
 class TestState(unittest.TestCase):
+
+    def test_module_doc(self):
+        self.assertIsNotNone(models.state.__doc__)
 
     def test_class_doc(self):
         self.assertIsNotNone(State.__doc__)
