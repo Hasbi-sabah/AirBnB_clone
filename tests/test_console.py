@@ -28,6 +28,22 @@ class TestConsole(unittest.TestCase):
     def test_class_doc(self):
         self.assertIsNotNone(HBNBCommand.__doc__)
 
+    def test_method_docs(self):
+        """Test all methods in ``console`` for docs"""
+        methods = [
+                HBNBCommand.do_EOF, HBNBCommand.help_EOF,
+                HBNBCommand.do_quit, HBNBCommand.help_quit,
+                HBNBCommand.emptyline, HBNBCommand.is_valid,
+                HBNBCommand.value_type, HBNBCommand.do_create,
+                HBNBCommand.help_create, HBNBCommand.do_show,
+                HBNBCommand.help_show, HBNBCommand.do_destroy,
+                HBNBCommand.help_destroy, HBNBCommand.do_all,
+                HBNBCommand.help_all, HBNBCommand.count,
+                HBNBCommand.do_update, HBNBCommand.default
+                ]
+        for meth in methods:
+            self.assertIsNotNone(meth.__doc__)
+
     def test_quit(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("quit")

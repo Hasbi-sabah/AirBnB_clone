@@ -6,6 +6,9 @@ from models.review import Review
 
 
 class TestReview(unittest.TestCase):
+    def test_class_doc(self):
+        self.assertIsNotNone(Review.__doc__)
+
     def test_attribute_place_id(self):
         review = Review()
         self.assertTrue(hasattr(review, 'place_id'))

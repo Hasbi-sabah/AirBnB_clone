@@ -229,6 +229,9 @@ class HBNBCommand(cmd.Cmd):
         """
         instances = storage.all()
         count = 0
+        if line not in self.cls:
+            print("** class doesn't exist **")
+            return
         for inst in instances:
             if line == instances[inst].to_dict()["__class__"]:
                 count += 1

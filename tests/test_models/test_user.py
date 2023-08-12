@@ -7,6 +7,9 @@ from models.user import User
 
 class TestUser(unittest.TestCase):
     """ Test User class"""
+    def test_class_doc(self):
+        self.assertIsNotNone(User.__doc__)
+
     def test_attribute_email(self):
         user = User()
         self.assertTrue(hasattr(user, 'email'))
