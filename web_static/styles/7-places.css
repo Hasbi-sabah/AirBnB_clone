@@ -5,15 +5,16 @@
     font-size: 30px;
 }
 
-.places {
+.places div {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 .places article {
     width: 390px;
     padding: 20px;
     margin: 20px;
     border: 1px solid #FF5A5F;
+    border-radius: 4px;
     text-align: center;
 }

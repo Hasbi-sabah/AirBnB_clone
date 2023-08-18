@@ -4,6 +4,9 @@
     width: 100%;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .filters button {
@@ -23,10 +26,6 @@
 }
 
 .locations {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
     height: 100%;
     width: 25%;
     margin-left: 30px;
@@ -34,13 +33,10 @@
 }
 
 .amenities {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
     height: 100%;
     width: 25%;
     margin-left: 30px;
+    margin-right: 200px;
 }
 
 .filters h3 {
