@@ -1,6 +1,6 @@
 .places h1 {
     position: relative;
-    top: 0;
+    top: 10pxacp;
     left: 0;
     font-size: 30px;
 }
@@ -10,15 +10,22 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
+
+.places h2 {
+    font-size: 30px;
+    position: relative;
+    top: -15px;
+    text-align: center;
+}
 .places .element{
     width: 390px;
     padding: 20px;
     margin: 20px;
     border: 1px solid #FF5A5F;
     border-radius: 4px;
+    position: relative;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 }
 
 .places .price_by_night {
@@ -28,8 +35,67 @@
     min-width: 60px;
     height: 60px;
     font-size: 30px;
-    padding: 7px;
+    padding: 5px;
     display: flex;
     align-items: center; 
     justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.places .element .information {
+    height: 80px;
+    width: 100%;
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    position: relative;
+    top: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: center;
+}
+
+.places .element .information .max_guest,
+.places .element .information .number_rooms,
+.places .element .information .number_bathrooms {
+    width: 100px;
+    display: block;
+    margin-top: 19px;
+}
+
+.places .element .information p {
+    margin-top: 40px;
+}
+
+.places .element .information .max_guest {
+    background: url(../images/icon_group.png) 20px center no-repeat;
+    background-size: auto;
+    background-position: top;
+    padding: 10px;
+    text-align: center;
+}
+.places .element .information .number_rooms {
+    background: url(../images/icon_bed.png) 20px center no-repeat;
+    background-size: auto;
+    background-position: top;
+    padding: 10px;
+    text-align: center;
+}
+
+.places .element .information .number_bathrooms {
+    background: url(../images/icon_bath.png) 20px center no-repeat;
+    background-size: auto;
+    background-position: top;
+    padding: 10px;
+    text-align: center;
+}
+
+.places .element .user {
+    margin-top: 30px;
+}
+
+.places .element .description {
+    margin-top: 10px;
 }
