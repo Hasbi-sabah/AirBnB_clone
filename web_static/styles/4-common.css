@@ -5,16 +5,16 @@ body {
     font-size: 14px;
     font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
     bottom: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.filler {
-    display: flex;
-    min-height: 68vh;
-    flex-direction: column;
-    justify-content: flex-end;
-}
 .container {
     max-width: 1000px;
-    margin: 30px auto;
-    overflow-x: hidden;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
 }
